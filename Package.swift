@@ -29,7 +29,10 @@ let package = Package(
         ),
         .testTarget(
             name: "MLXUtilsLibraryTests",
-            dependencies: ["MLXUtilsLibrary"]
+            dependencies: ["MLXUtilsLibrary"],
+            resources: [
+                .copy("Resources")
+            ]
         ),
     ]
 )

@@ -33,11 +33,11 @@ extension MLXArray {
     
     func fmt(_ v: Float) -> String { String(format: "%.\(precision)g", v) }
     
-    print("MLXArray shape: \(shape)  count: \(total)")
+    logPrint("MLXArray shape: \(shape)  count: \(total)")
     
     // 0-D (scalar)
     if shape.isEmpty {
-      if let v = flat.first { print(v) } else { print("(empty)") }
+      if let v = flat.first { logPrint("\(v)") } else { print("(empty)") }
       return
     }
     
@@ -45,18 +45,18 @@ extension MLXArray {
     // If 1-D: rows = 1, cols = count
     // If 2-D+: collapse leading dims into rows and use last dim as columns.
     let cols = shape.last ?? flat.count
-    guard cols > 0 else { print("[]"); return }
+    guard cols > 0 else { logPrint("[]"); return }
     let rows = Swift.max(1, flat.count / cols)
     
     // 1-D pretty print
     if shape.count == 1 {
       if cols <= headCols + tailCols {
         let line = flat.prefix(cols).map(fmt).joined(separator: ", ")
-        print("[\(line)]")
+        logPrint("[\(line)]")
       } else {
         let head = flat.prefix(headCols).map(fmt).joined(separator: ", ")
         let tail = flat.suffix(tailCols).map(fmt).joined(separator: ", ")
-        print("[\(head), ..., \(tail)]")
+        logPrint("[\(head), ..., \(tail)]")
       }
       return
     }
@@ -75,17 +75,17 @@ extension MLXArray {
       }
     }
     
-    print("[")
+    logPrint("[")
     if rows <= headRows + tailRows {
       for r in 0..<rows {
-        print("  \(rowString(r))")
+        logPrint("  \(rowString(r))")
       }
     } else {
-      for r in 0..<headRows { print("  \(rowString(r))") }
-      print("  ...")
-      for r in (rows - tailRows)..<rows { print("  \(rowString(r))") }
+      for r in 0..<headRows { logPrint("  \(rowString(r))") }
+      logPrint("  ...")
+      for r in (rows - tailRows)..<rows { logPrint("  \(rowString(r))") }
     }
-    print("]")
+    logPrint("]")
   }
 
   #else
