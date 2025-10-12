@@ -4,6 +4,7 @@
 
 ## User settings
 xcuserdata/
+.swiftpm/xcode
 
 ## Obj-C/Swift specific
 *.hmap
