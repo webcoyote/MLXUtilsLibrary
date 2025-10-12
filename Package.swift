@@ -16,12 +16,16 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/weichsel/ZIPFoundation.git", .upToNextMajor(from: "0.9.0"))
+        .package(url: "https://github.com/weichsel/ZIPFoundation.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "https://github.com/ml-explore/mlx-swift", from: "0.25.6")
     ],
     targets: [
         .target(
             name: "MLXUtilsLibrary",
-            dependencies: ["ZIPFoundation"]
+            dependencies: [
+                "ZIPFoundation",
+                .product(name: "MLX", package: "mlx-swift")
+            ]
         ),
         .testTarget(
             name: "MLXUtilsLibraryTests",
