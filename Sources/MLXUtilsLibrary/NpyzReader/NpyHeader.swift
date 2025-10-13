@@ -25,6 +25,8 @@ struct NpyHeader {
   let isFortranOrder: Bool
   let descr: String
   
+  var elementsCount: Int { shape.reduce(1, *) }
+  
   private init(shape: [Int], dataType: NpyDataType, endian: Endian, isFortranOrder: Bool, descr: String) {
     self.shape = shape
     self.dataType = dataType

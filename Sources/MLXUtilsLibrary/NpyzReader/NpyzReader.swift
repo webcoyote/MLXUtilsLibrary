@@ -2,6 +2,7 @@
 //  MLXUtilsLibrary
 //
 import Foundation
+import MLX
 import ZIPFoundation
 
 public class NpyzReader {
@@ -34,24 +35,30 @@ public class NpyzReader {
     return result
   }
   
-  public static func read<T>(data: Data, arrayOutputType: T.Type, isPacked: Bool = false, name: String = "npy") -> [[T]]? {
+  public static func read(data: Data, isPacked: Bool = false, name: String = "npy") -> [String: MLXArray]? {
     guard let arraysToUnpack = isPacked ? unarchive(data: data) : [name: data] else {
       return nil
     }
     
+    var output: [String: MLXArray] = [:]
     for (name, data) in arraysToUnpack {
-      
+      do {
+        let container = try NpyContainer.parse(data: data)
+        output[name] = container.mlxArray()
+      } catch {
+        logPrint("Could not parse the npy data")
+      }
     }
             
-    return nil
+    return output
   }
   
-  public static func read<T>(fileFromPath path: URL, arrayOutputType: T.Type, isPacked: Bool? = nil) -> [[T]]? {
+  public static func read(fileFromPath path: URL, isPacked: Bool? = nil) -> [String : MLXArray]? {
     guard path.isFileURL, let data = try? Data(contentsOf: path) else {
       return nil
     }
     
     let packed = isPacked == nil ? path.pathExtension.lowercased() == "npz" : isPacked!
-    return read(data: data, arrayOutputType: arrayOutputType, isPacked: packed, name: path.lastPathComponent)
+    return read(data: data, isPacked: packed, name: path.lastPathComponent)
   }
 }
