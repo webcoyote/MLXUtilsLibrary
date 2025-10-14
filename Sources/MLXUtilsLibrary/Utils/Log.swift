@@ -14,15 +14,7 @@ import Foundation
 /// This function is thread-safe as it relies on Swift's `print()` function,
 /// which handles concurrent access internally.
 ///
-/// ## Usage Example
-/// ```swift
-/// logPrint("Debug message")
-/// logPrint("Value: \(someVariable)")
-/// ```
-///
 /// - Parameter s: The string to print to the console
-///
-/// **Note:** Only active in DEBUG builds. In RELEASE builds, this is a no-op.
 @inline(__always) public func logPrint(_ s: String) {
   print(s)
 }

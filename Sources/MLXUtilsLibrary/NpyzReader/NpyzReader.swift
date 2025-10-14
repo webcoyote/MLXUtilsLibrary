@@ -5,7 +5,9 @@ import Foundation
 import MLX
 import ZIPFoundation
 
-public class NpyzReader {
+public final class NpyzReader {
+  private init() {}
+  
   private static func unarchive(data: Data) -> [String: Data]? {
     // Initialize an archive from in-memory data
     guard let archive = try? Archive(data: data, accessMode: .read, pathEncoding: nil) else {
@@ -21,7 +23,7 @@ public class NpyzReader {
       var fileData = Data()
       fileData.reserveCapacity(Int(entry.uncompressedSize))
 
-      // Stream the entry’s bytes into our Data buffer
+      // Stream the bytes into our Data buffer
       do {
         _ = try archive.extract(entry, skipCRC32: true) { chunk in
           fileData.append(chunk)
@@ -45,6 +47,7 @@ public class NpyzReader {
       do {
         let container = try NpyContainer.parse(data: data)
         output[name] = container.mlxArray()
+        logPrint("\(name): Array shaped \(output[name]!.shape)")
       } catch {
         logPrint("Could not parse the npy data")
       }

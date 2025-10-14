@@ -30,8 +30,7 @@ import MLX
 /// // Clean up timers
 /// BenchmarkTimer.reset()
 /// ```
-public class BenchmarkTimer {
-  
+public final class BenchmarkTimer {
   /// Internal class representing a single timing measurement.
   ///
   /// Each `Timing` instance tracks the start/stop times of a task and maintains
