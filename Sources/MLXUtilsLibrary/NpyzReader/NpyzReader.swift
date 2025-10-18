@@ -5,9 +5,16 @@ import Foundation
 import MLX
 import ZIPFoundation
 
+/// A reader for NumPy `.npy` and `.npz` file formats. Based on https://github.com/qoncept/swift-npy
+/// `NpyzReader` provides static methods to load NumPy arrays from both single `.npy` files and
+/// compressed `.npz` archives (which contain multiple `.npy` files). The arrays are converted to MLX arrays..
 public final class NpyzReader {
+  /// Private constructor, this class should never be instantiated.
   private init() {}
   
+  /// Unarchives a ZIP-compressed `.npz` file into a dictionary of array names to raw data.
+  /// - Parameter data: The compressed `.npz` file data.
+  /// - Returns: A dictionary mapping array names to their raw `.npy` data, or `nil` if extraction fails.
   private static func unarchive(data: Data) -> [String: Data]? {
     // Initialize an archive from in-memory data
     guard let archive = try? Archive(data: data, accessMode: .read, pathEncoding: nil) else {
@@ -37,6 +44,13 @@ public final class NpyzReader {
     return result
   }
   
+  /// Reads NumPy array data and converts it to MLX arrays.
+  /// This method can handle both single `.npy` files and `.npz` archives containing multiple arrays.
+  /// - Parameters:
+  ///   - data: The raw file data (either `.npy` or `.npz` format).
+  ///   - isPacked: Whether the data is a `.npz` archive (defaults to `false`).
+  ///   - name: The name to use for a single array when `isPacked` is `false` (defaults to "npy").
+  /// - Returns: A dictionary mapping array names to `MLXArray` instances, or `nil` if reading fails.
   public static func read(data: Data, isPacked: Bool = false, name: String = "npy") -> [String: MLXArray]? {
     guard let arraysToUnpack = isPacked ? unarchive(data: data) : [name: data] else {
       return nil
@@ -56,6 +70,13 @@ public final class NpyzReader {
     return output
   }
   
+  /// Reads NumPy arrays from a file path and converts them to MLX arrays.
+  /// This method loads data from a file URL and automatically determines whether it's a `.npz`
+  /// archive based on the file extension (unless explicitly specified).
+  /// - Parameters:
+  ///   - path: The file URL to read from (must be a file URL, not a remote URL).
+  ///   - isPacked: Whether the file is a `.npz` archive. If `nil`, determined automatically from the file extension.
+  /// - Returns: A dictionary mapping array names to `MLXArray` instances, or `nil` if reading fails.
   public static func read(fileFromPath path: URL, isPacked: Bool? = nil) -> [String : MLXArray]? {
     guard path.isFileURL, let data = try? Data(contentsOf: path) else {
       return nil
