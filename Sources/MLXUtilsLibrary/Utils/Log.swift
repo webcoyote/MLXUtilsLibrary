@@ -10,8 +10,7 @@ import Foundation
 /// with zero runtime overhead, ensuring that no log statements affect production
 /// performance or binary size.
 ///
-/// ## Thread Safety
-/// This function is thread-safe as it relies on Swift's `print()` function,
+/// **Thread Safety:** This function is thread-safe as it relies on Swift's `print()`,
 /// which handles concurrent access internally.
 ///
 /// - Parameter s: The string to print to the console

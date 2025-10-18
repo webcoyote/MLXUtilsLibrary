@@ -11,7 +11,7 @@ import MLX
 ///
 /// **Thread Safety:** This class is thread-safe and can be used across multiple threads.
 ///
-/// ## Usage Example:
+/// Usage Example:
 /// ```swift
 /// // Start timing the main task
 /// BenchmarkTimer.startTimer("mainTask")
