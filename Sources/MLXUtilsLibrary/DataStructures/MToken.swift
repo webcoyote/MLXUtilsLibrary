@@ -121,7 +121,7 @@ public class MToken {
   
   /// Creates a deep copy of an existing `MToken` instance.
   /// - Parameter other: The `MToken` instance to copy.
-  convenience init(copying other: MToken) {
+  public convenience init(copying other: MToken) {
     self.init(
       text: other.text,
       tokenRange: other.tokenRange,
